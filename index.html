@@ -7,7 +7,7 @@
   <title>NFC Image Reader</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
       margin: 0;
       padding: 0;
       display: flex;
@@ -20,6 +20,7 @@
 
     h2 {
       margin-bottom: 20px;
+      color: #333;
     }
 
     button {
@@ -27,6 +28,14 @@
       padding: 10px;
       font-size: 16px;
       cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #45a049;
     }
 
     #NFC-results {
@@ -60,12 +69,9 @@
       NFC Results:
       <ul id="NFC-results"></ul>
     </div>
-    <button onclick="decrypt();">Decrypt</button>
-    <div id="decrypted"></div>
     <div id="image-container"></div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.js"></script>
   <script>
     let ndef;
     let abortController;
@@ -140,17 +146,6 @@
       imgElement.alt = "NFC Image";
       imageContainer.innerHTML = "";
       imageContainer.appendChild(imgElement);
-    }
-
-    function decrypt() {
-      if (NFCResults.length > 0) {
-        const record = NFCResults[0];
-        const buf = record.data.buffer;
-        const key = new TextDecoder().decode(buf);
-        document.getElementById("decrypted").innerText = `Decrypted with key: ${key}`;
-      } else {
-        alert("Please scan the NFC tag first.");
-      }
     }
   </script>
 </body>
