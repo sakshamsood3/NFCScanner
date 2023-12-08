@@ -15,13 +15,13 @@
       align-items: center;
       justify-content: center;
       height: 100vh;
-      background-image: url('https://cellularnews.com/wp-content/uploads/2023/09/how-to-turn-off-nfc-on-iphone-1694680662.jpg'); /* Replace 'your-background-image.jpg' with the path to your image */
+      background-image: url('https://assets-global.website-files.com/5aa16619a722600001c19c3f/5c76e19a3df091b6d472af18_How-to-Scan-NFC-Header.png'); 
       background-size: cover;
       background-position: center;
     }
 
     .app {
-      background-color: rgba(255, 255, 255, 0.8);
+      background-color: rgba(169, 169, 169, 0.9);
       padding: 20px;
       border-radius: 10px;
       text-align: center;
@@ -85,7 +85,6 @@
     let ndef;
     let abortController;
     let NFCResults = [];
-    let timeout;
 
     checkIFNFCSupported();
 
@@ -100,12 +99,11 @@
       const btn = document.getElementById("NFC-btn");
       if (btn.innerText === "Scan NFC Tags") {
         btn.innerText = "Stop Scanning NFC Tags";
-        clearTimeout(timeout);
         scanNFCTags();
       } else {
         btn.innerText = "Scan NFC Tags";
         abortController.abort();
-        timeout = setTimeout(clearResults, 3000); // Clear results after 3 seconds of inactivity
+        clearResults();
       }
     }
 
@@ -122,7 +120,6 @@
           NFCResults = [];
           NFCResults = NFCResults.concat(event.message.records);
           displayNFCResults();
-          clearTimeout(timeout);
         };
       }
       ndef.scan({
