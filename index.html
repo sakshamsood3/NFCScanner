@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-  <title>NFC Image Reader</title>
+  <title>NFC Data Reader</title>
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -41,23 +41,23 @@
     #NFC-results {
       list-style-type: none;
       padding: 0;
+      margin-top: 20px;
     }
 
     #NFC-results li {
       margin-bottom: 10px;
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
       word-break: break-all;
-    }
-
-    #image-container {
-      margin-top: 20px;
-      max-width: 100%;
     }
   </style>
 </head>
 
 <body>
   <div class="app">
-    <h2>NFC Image Reader</h2>
+    <h2>NFC Data Reader</h2>
     <div>
       <label>Status:</label>
       <span id="status"></span>
@@ -69,7 +69,6 @@
       NFC Results:
       <ul id="NFC-results"></ul>
     </div>
-    <div id="image-container"></div>
   </div>
 
   <script>
@@ -122,8 +121,8 @@
     }
 
     function displayNFCResults() {
-      const ol = document.getElementById("NFC-results");
-      ol.innerHTML = "";
+      const ul = document.getElementById("NFC-results");
+      ul.innerHTML = "";
       for (let index = 0; index < NFCResults.length; index++) {
         const record = NFCResults[index];
         const buf = record.data.buffer;
@@ -131,21 +130,8 @@
         console.log(str);
         const li = document.createElement("li");
         li.innerText = str;
-        ol.appendChild(li);
-
-        // Extracted URL from NFC tag
-        const imageUrl = str;
-        displayImage(imageUrl);
+        ul.appendChild(li);
       }
-    }
-
-    function displayImage(imageUrl) {
-      const imageContainer = document.getElementById("image-container");
-      const imgElement = document.createElement("img");
-      imgElement.src = imageUrl;
-      imgElement.alt = "NFC Image";
-      imageContainer.innerHTML = "";
-      imageContainer.appendChild(imgElement);
     }
   </script>
 </body>
