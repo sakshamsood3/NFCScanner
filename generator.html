@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script type="text/javascript" src="qrcode.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.js"></script>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+</head>
+
+<body>
+  <div>Original URL:</div>
+  <textarea id="originalUrl">https://www.dynamsoft.com</textarea>
+  <div>Key:</div>
+  <input type="text" id="key" value="dynamsoft"></input>
+  <div id="placeHolder"></div>
+  <button onclick="createQRCode();">Create Encrypted QR Code</button>
+  <button id="NFC-btn" onclick="scanNFC();">Scan NFC Tag</button>
+  <div id="nfcResult"></div>
+
+  <script>
+    checkIFNFCSupported();
+
+    function checkIFNFCSupported() {
+      if (!("NDEFReader" in window)) {
+        alert("NFC is not supported.");
+        document.getElementById("NFC-btn").disabled = true;
+      }
+    }
+
+    function createQRCode() {
+      let typeNumber = 0;
+      let errorCorrectionLevel = 'L';
+      let qr = qrcode(typeNumber, errorCorrectionLevel);
+      let originalUrl = document.getElementById("originalUrl").value;
+      let key = document.getElementById("key").value;
+      let encryptedMessage = CryptoJS.AES.encrypt(originalUrl, key).toString();
+      qr.addData(encryptedMessage);
+      qr.make();
+      let placeHolder = document.getElementById('placeHolder');
+      placeHolder.innerHTML = qr.createImgTag();
+      let img = placeHolder.children[0];
+      let width = img.getAttribute("width").replace("px", "");
+      let height = img.getAttribute("height").replace("px", "");
+      img.setAttribute("width", width);
+      img.setAttribute("height", height);
+    }
+
+    async function scanNFC() {
+      try {
+        const ndef = new NDEFReader();
+        ndef.onreadingerror = () => {
+          console.log("Cannot read data from the NFC tag. Try another one?");
+        };
+        ndef.onreading = async (event) => {
+          console.log("NDEF message read.");
+          const record = event.message.records[0];
+          const buf = record.data.buffer;
+          const key = document.getElementById("key").value;
+          const decryptedUrl = CryptoJS.AES.decrypt(new TextDecoder().decode(buf), key).toString(CryptoJS.enc.Utf8);
+          document.getElementById("nfcResult").innerText = `Decrypted URL: ${decryptedUrl}`;
+          await fetchAndDisplayUrl(decryptedUrl);
+        };
+
+        await ndef.scan();
+      } catch (error) {
+        console.log(`Error: ${error}`);
+      }
+    }
+
+    async function fetchAndDisplayUrl(url) {
+      try {
+        const response = await fetch(url);
+        if (response.ok) {
+          const imageDataUrl = await response.blob();
+          const imgElement = document.createElement("img");
+          imgElement.src = URL.createObjectURL(imageDataUrl);
+          document.body.appendChild(imgElement);
+        } else {
+          console.error("Failed to fetch image:", response.status);
+        }
+      } catch (error) {
+        console.error("Error fetching image:", error);
+      }
+    }
+  </script>
+</body>
+
+</html>
