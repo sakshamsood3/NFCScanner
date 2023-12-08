@@ -15,7 +15,16 @@
       align-items: center;
       justify-content: center;
       height: 100vh;
-      background-color: #f5f5f5;
+      background-image: url('https://assets-global.website-files.com/5aa16619a722600001c19c3f/5c76e19a3df091b6d472af18_How-to-Scan-NFC-Header.png'); /* Replace 'your-background-image.jpg' with the path to your image */
+      background-size: cover;
+      background-position: center;
+    }
+
+    .app {
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
     }
 
     h2 {
@@ -71,6 +80,7 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.js"></script>
   <script>
     let ndef;
     let abortController;
@@ -93,6 +103,7 @@
       } else {
         btn.innerText = "Scan NFC Tags";
         abortController.abort();
+        clearResults();
       }
     }
 
@@ -132,6 +143,11 @@
         li.innerText = str;
         ul.appendChild(li);
       }
+    }
+
+    function clearResults() {
+      const ul = document.getElementById("NFC-results");
+      ul.innerHTML = "";
     }
   </script>
 </body>
