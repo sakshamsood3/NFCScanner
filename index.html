@@ -82,6 +82,9 @@
 
   <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.js"></script>
   <script>
+    window.onbeforeunload = function(){
+            return 'Are you sure you want to leave?';
+        };
     let ndef;
     let abortController;
     let NFCResults = [];
