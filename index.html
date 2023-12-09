@@ -115,6 +115,7 @@
           console.log("Cannot read data from the NFC tag. Try another one?");
         };
         ndef.onreading = event => {
+          event.preventDefault()
           console.log("NDEF message read.");
           console.log(event);
           NFCResults = [];
